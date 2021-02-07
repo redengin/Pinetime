@@ -1,71 +1,70 @@
-cmake_minimum_required(VERSION 3.10)
-project(pinetime VERSION 0.10.0 LANGUAGES C CXX ASM)
+cmake_minimum_required(VERSION 3.17)
 
-set(NRF_TARGET "nrf52")
+# Target Toolchain Configuration
+#-------------------------------------------------------------------------------
+# NRF52 Toolchain settings
+set(CMAKE_SYSTEM_NAME "Generic")
+set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
+set(CMAKE_CXX_COMPILER "arm-none-eabi-g++")
+set(CPU_FLAGS "-mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16")
+string(CONCAT COMMON_FLAGS
+    "-MP -MD ${CPU_FLAGS} -mthumb -mabi=aapcs"
+    " -Wall -Werror -Wreturn-type -Werror=return-type"
+    " -ffunction-sections -fdata-sections -fno-strict-aliasing"
+    " -fno-builtin --short-enums")
+set(CMAKE_C_FLAGS "${COMMON_FLAGS} -std=c17")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -g3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
+set(CMAKE_CXX_FLAGS "${COMMON_FLAGS} -std=c++17")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g3")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+set(CMAKE_ASM_FLAGS "-MP -MD -std=c99 -x assembler-with-cpp")
+string(CONCAT CMAKE_EXE_LINKER_FLAGS
+    "-mthumb -mabi=aapcs ${CPU_FLAGS}"
+    " -L ${NRF5_SDK_PATH}/modules/nrfx/mdk"
+    " -L${CMAKE_SOURCE_DIR} -Tgcc_nrf52.ld"
+    " -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm")
+# note: we must override the default cmake linker flags so that CMAKE_C_FLAGS are not added implicitly
+set(CMAKE_C_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -lstdc++ -o <TARGET> <LINK_LIBRARIES>")
 
-if (NOT ARM_NONE_EABI_TOOLCHAIN_PATH)
-  message(FATAL_ERROR "The path to the toolchain (arm-none-eabi) must be specified on the command line (add -DARM_NONE_EABI_TOOLCHAIN_PATH=<path>")
-endif ()
+project(pinetime
+    VERSION 0.1.0
+    LANGUAGES ASM C CXX
+)
+# create static binaries
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+# turn on pedantic static-analysis (code smell)
+string(APPEND CMAKE_C_FLAGS " -pedantic-errors")
+string(APPEND CMAKE_CXX_FLAGS " -pedantic-errors")
+# disable CMake searching magic
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-if (NOT NRF5_SDK_PATH)
-  message(FATAL_ERROR "The path to the NRF52 SDK must be specified on the command line (add -DNRF5_SDK_PATH=<path>")
-endif ()
+# Fetch NRFSDK
+include(FetchContent)
+set(FETCHCONTENT_QUIET OFF) # enable verbose info
+set(FETCHCONTENT_UPDATES_DISCONNECTED ON) # disable re-pull
+FetchContent_Declare("project_nrfsdk"
+    URL "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK1702d674dde.zip"
+    URL_HASH "MD5=a04e2f76e712689aa1dff13969696af3")
+FetchContent_Populate("project_nrfsdk")
+add_library("nrfsdk"
+    "${project_nrfsdk_SOURCE_DIR}/modules/nrfx/mdk/system_nrf52.c"
+    "${project_nrfsdk_SOURCE_DIR}/modules/nrfx/mdk/gcc_startup_nrf52.S")
+target_compile_definitions("nrfsdk" PUBLIC "-DNRF52832_XXAA" "-DFREERTOS")
+target_include_directories("nrfsdk"
+    PUBLIC
+        "${project_nrfsdk_SOURCE_DIR}/modules/nrfx/mdk/"
+        "${project_nrfsdk_SOURCE_DIR}/components/toolchain/cmsis/include/"
+        "${project_nrfsdk_SOURCE_DIR}/components/drivers_nrf/nrf_soc_nosd/"
+        "${project_nrfsdk_SOURCE_DIR}/components/libraries/util/")
 
-if(NOT USE_JLINK AND NOT USE_GDB_CLIENT AND NOT USE_OPENOCD)
-  set(USE_JLINK true)
-endif()
+# Fetch and Configure FreeRTOS
+add_subdirectory("freertos")
 
-if(USE_JLINK)
-  if (NOT NRFJPROG)
-    message(FATAL_ERROR "the path to the tool nrfjprog must be specified on the command line (add -DNRFJPROG=<path>")
-  endif ()
-endif()
-
-if(USE_GDB_CLIENT)
-  if(NOT GDB_CLIENT_BIN_PATH)
-    set(GDB_CLIENT_BIN_PATH "arm-none-eabi-gdb")
-  endif()
-
-  if(NOT GDB_CLIENT_TARGET_REMOTE)
-    message(FATAL_ERROR "The GDB target must be specified (add -DGDB_CLIENT_TARGET_REMOTE=<target>")
-  endif()
-endif()
-
-if(USE_OPENOCD)
-  if(NOT OPENOCD_BIN_PATH)
-    set(OPENOCD_BIN_PATH "openocd")
-  endif()
-endif()
-
-if(DEFINED USE_DEBUG_PINS AND USE_DEBUG_PINS)
-  add_definitions(-DUSE_DEBUG_PINS)
-endif()
-
-message("BUILD CONFIGURATION")
-message("-------------------")
-message("    * Version : " ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
-message("    * Toolchain : " ${ARM_NONE_EABI_TOOLCHAIN_PATH})
-message("    * NRF52 SDK : " ${NRF5_SDK_PATH})
-set(PROGRAMMER "???")
-if(USE_JLINK)
-  message("    * Programmer/debugger : JLINK")
-  message("    * NrfJprog : " ${NRFJPROG})
-elseif(USE_GDB_CLIENT)
-  message("    * Programmer/debugger : GDB Client")
-  message("    * GDB Client path : " ${GDB_CLIENT_BIN_PATH})
-  message("    * GDB Target : " ${GDB_CLIENT_TARGET_REMOTE})
-elseif(USE_OPENOCD)
-  message("    * Programmer/debugger : OpenOCD Client")
-endif()
-if(USE_DEBUG_PINS)
-  message("    * Debug pins : Enabled")
-else()
-  message("    * Debug pins : Disabled")
-endif()
-
-set(VERSION_EDIT_WARNING "// Do not edit this file, it is automatically generated by CMAKE!")
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/Version.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/Version.h)
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/docker/post_build.sh.in ${CMAKE_CURRENT_BINARY_DIR}/post_build.sh)
-
-
-add_subdirectory(src)
+add_executable(pinetime
+    "main.cpp"
+)
