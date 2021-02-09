@@ -43,28 +43,16 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
-# Fetch NRFSDK
-include(FetchContent)
-set(FETCHCONTENT_QUIET OFF) # enable verbose info
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON) # disable re-pull
-FetchContent_Declare("project_nrfsdk"
-    URL "https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK1702d674dde.zip"
-    URL_HASH "MD5=a04e2f76e712689aa1dff13969696af3")
-FetchContent_Populate("project_nrfsdk")
-add_library("nrfsdk"
-    "${project_nrfsdk_SOURCE_DIR}/modules/nrfx/mdk/system_nrf52.c"
-    "${project_nrfsdk_SOURCE_DIR}/modules/nrfx/mdk/gcc_startup_nrf52.S")
-target_compile_definitions("nrfsdk" PUBLIC "-DNRF52832_XXAA" "-DFREERTOS")
-target_include_directories("nrfsdk"
-    PUBLIC
-        "${project_nrfsdk_SOURCE_DIR}/modules/nrfx/mdk/"
-        "${project_nrfsdk_SOURCE_DIR}/components/toolchain/cmsis/include/"
-        "${project_nrfsdk_SOURCE_DIR}/components/drivers_nrf/nrf_soc_nosd/"
-        "${project_nrfsdk_SOURCE_DIR}/components/libraries/util/")
-
+# Fetch and Configure NRFSDK
+add_subdirectory("nrfsdk")
 # Fetch and Configure FreeRTOS
 add_subdirectory("freertos")
+# Fetch and Configure LVGL
+add_subdirectory("lvgl")
 
-add_executable(pinetime
-    "main.cpp"
+add_executable("pinetime"
+    "src/main.cpp"
 )
+target_link_libraries("pinetime"
+    "nrfsdk"
+    "freertos")

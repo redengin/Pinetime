@@ -18,7 +18,7 @@ stores.
 
 Application
 ================================================================================
-To satisfy the user, the full experience must be understood well.
+To satisfy the user, the full experience must be understood.
 ```plantuml
 (intent) -> (response)
 ```
@@ -27,8 +27,7 @@ To satisfy the user, the full experience must be understood well.
         * EXPLICIT CONTROL - user sets the time
         * AUTOMATIC CONTROL - the REMOTE and WATCH coordinate to determine the
             current time
-* response - how do you best inform the user using both the WATCH and REMOTE?
-
+* response - what does the WATCH need to do to support the user?
 
 WatchIt
 ================================================================================
@@ -38,7 +37,8 @@ A WatchIt executes inside the watch hardware.
 [WATCHIT] --> [SERVICE] : <GATT>
 [WATCHIT] --> [LOCAL]
 ```
-SPECIALIZED SERVICE - provides unique properties of the application
-SERVICE - provides generic properties of the WATCH and REMOTE
-LOCAL - provides ability to change watch behavior (display, vibration)
+* SPECIALIZED SERVICE - provides unique properties of the application
+* SERVICE - provides generic properties of the WATCH and REMOTE
+* LOCAL - provides ability to change watch behavior (display, vibration)
 
+For API details see [WatchIt.hpp](../src/WatchIt.hpp).

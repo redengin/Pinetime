@@ -33,7 +33,7 @@ target_include_directories("freertos"
         "."
         "${project_freertos_SOURCE_DIR}/include/"
         "${project_freertos_SOURCE_DIR}/portable/GCC/ARM_CM4F/")
-target_link_libraries("freertos" "nrfsdk")
+target_link_libraries("freertos" "nrfsdk" "lvgl")
     # # specialized FreeRTOSConfig.h
     # ${CMAKE_SOURCE_DIR}/common/miv/freertos/
     # # HAL interfaces 
