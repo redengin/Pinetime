@@ -20,13 +20,13 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g3")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_ASM_FLAGS "-MP -MD -std=c99 -x assembler-with-cpp")
 string(CONCAT CMAKE_EXE_LINKER_FLAGS
-    "-mthumb -mabi=aapcs ${CPU_FLAGS}"
+    "${CPU_FLAGS} -mthumb -mabi=aapcs"
     " -L ${NRF5_SDK_PATH}/modules/nrfx/mdk"
     " -L${CMAKE_SOURCE_DIR} -Tgcc_nrf52.ld"
     " -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm")
 # note: we must override the default cmake linker flags so that CMAKE_C_FLAGS are not added implicitly
-set(CMAKE_C_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
-set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -lstdc++ -o <TARGET> <LINK_LIBRARIES>")
+# set(CMAKE_C_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+# set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -lstdc++ -o <TARGET> <LINK_LIBRARIES>")
 
 project(pinetime
     VERSION 0.1.0
@@ -54,5 +54,7 @@ add_executable("pinetime"
     "src/main.cpp"
 )
 target_link_libraries("pinetime"
-    "nrfsdk"
-    "freertos")
+    PRIVATE
+        "nrfsdk"
+        "freertos"
+        "lvgl")

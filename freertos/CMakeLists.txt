@@ -23,9 +23,12 @@ add_library("freertos-kernel"
     "${project_freertos_SOURCE_DIR}/timers.c")
 target_include_directories("freertos-kernel"
     PUBLIC "${project_freertos_SOURCE_DIR}/include/")
-target_link_libraries("freertos-kernel" "freertos")
+target_link_libraries("freertos-kernel"
+    PRIVATE
+        "nrfsdk"
+        "freertos")
 
-# FreeRTOS nrf52 port
+# FreeRTOS NRF52 port
 add_library("freertos"
     "${project_freertos_SOURCE_DIR}/portable/GCC/ARM_CM4F/port.c")
 target_include_directories("freertos"
@@ -33,10 +36,8 @@ target_include_directories("freertos"
         "."
         "${project_freertos_SOURCE_DIR}/include/"
         "${project_freertos_SOURCE_DIR}/portable/GCC/ARM_CM4F/")
-target_link_libraries("freertos" "nrfsdk" "lvgl")
-    # # specialized FreeRTOSConfig.h
-    # ${CMAKE_SOURCE_DIR}/common/miv/freertos/
-    # # HAL interfaces 
-    # ${project_freertos_SOURCE_DIR}/portable/GCC/RISC-V/chip_specific_extensions/RV32I_CLINT_no_extensions/
-    # ${CMAKE_SOURCE_DIR}/common/miv/riscv_hal/
-    # ${project_freertos_SOURCE_DIR}/portable/GCC/RISC-V/
+target_link_libraries("freertos"
+    PUBLIC
+        "freertos-kernel"
+    PRIVATE
+        "nrfsdk")

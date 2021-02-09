@@ -26,4 +26,7 @@ target_include_directories("nrfsdk"
         "${project_nrfsdk_SOURCE_DIR}/components/toolchain/cmsis/include/"
         "${project_nrfsdk_SOURCE_DIR}/components/drivers_nrf/nrf_soc_nosd/"
         "${project_nrfsdk_SOURCE_DIR}/components/libraries/util/")
-target_compile_options("nrfsdk" PRIVATE "-Wno-expansion-to-defined") # IGNORE use of GCC extensions
+target_compile_options("nrfsdk"
+    PRIVATE
+        "-Wno-expansion-to-defined" # IGNORE use of GCC extensions
+)
