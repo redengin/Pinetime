@@ -14,7 +14,7 @@ For on-watch API see [watch-api](watch-api.md).
 
 Embedded Development
 ================================================================================
-The focus of embedded development is to ensure that the General Development
+The focus of embedded development SDK is to ensure that the General Development
 isn't impacted by low-level concerns.
 
 Leverage the exploration of hardware from all the available sources, commit
