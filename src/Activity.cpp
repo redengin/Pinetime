@@ -9,3 +9,12 @@ Activity::Activity() {
 Activity::~Activity() {
 
 }
+
+
+FaceActivity::FaceActivity() {
+
+}
+
+FaceActivity::~FaceActivity() {
+
+}

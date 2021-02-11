@@ -52,13 +52,17 @@ public:
 
 
 // FIXME move to separate file
+// forward declaration
+class FaceActivity;
 class DefaultActivity : public Activity {
 public:
     explicit DefaultActivity();
     virtual ~DefaultActivity();
 
+    bool add(std::unique_ptr<FaceActivity>&); 
+    bool remove(std::unique_ptr<FaceActivity>&); 
 private:
-}; // end class Pinetime
+}; // end class Default Activity
 
 
 // FIXME move to separate file
@@ -68,7 +72,16 @@ public:
     virtual ~DfuActivity();
 
 private:
-}; // end class Pinetime
+}; // end class DfuActivity
+
+// FIXME move to separate file
+class FaceActivity : public Activity {
+public:
+    explicit FaceActivity();
+    virtual ~FaceActivity();
+
+private:
+}; // end class FaceActivity
 
 
 

@@ -56,6 +56,10 @@ add_executable("pinetime"
     "src/Activity.cpp"
     "src/DefaultActivity.cpp"
 )
+target_include_directories("pinetime"
+    PRIVATE
+        "src/"
+)
 target_link_libraries("pinetime"
     PRIVATE
         "nrfsdk"
