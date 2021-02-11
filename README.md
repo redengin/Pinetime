@@ -1,24 +1,31 @@
-How do I test it out?
-================================================================================
-TBD
-<!-- for now we need to concentrate on development -->
-
-Our definition of a watch
+What is a **Watch** (what makes a wearable useful)
 ================================================================================
 * **Available** - presents the information and control when you need it.
     * minimize the need for charging
-* **Simple** - accessing information is simple.
+* **Simple** - accessing information is intuitive
 
-Available
+Usage
 ================================================================================
-Rather than assume the user's needs, the watch follows the user's control
-patterns.
-
-Power Saving
+Building
 --------------------------------------------------------------------------------
-When the user is not interacting with the watch, the watch goes into a low power
-mode.
+To **build** the project, everything is simplified via docker.
 
-Interested?
-================================================================================
-* developers - checkout [development](docs/development.md)
+To create the docker image:
+```sh
+# From the checked-out directory
+docker build -t pinetime-build docker/pinetime-build
+```
+Once you have the docker image, you don't need to re-run the above.
+
+To build use:
+```sh
+./docker/build.sh
+```
+
+Development
+--------------------------------------------------------------------------------
+You have great ideas for how you'd like to use a watch.
+
+To realize those ideas:
+* you can create an ISSUE
+* you can develop a [solution](docs/development.md)

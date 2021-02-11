@@ -1,6 +1,6 @@
 Where can you make a difference?
 ================================================================================
-* General developers - need to understand how to make something
+* General developers - need to understand how their design impacts power usage
 * Embedded developers - need to understand the low-level details
 
 General Development
@@ -12,7 +12,7 @@ into the watch output resources (display, vibration).
 
 For on-watch API see [watch-api](watch-api.md).
 
-Embedded Development
+Embedded Development (Things running on the watch)
 ================================================================================
 The focus of embedded development SDK is to ensure that the General Development
 isn't impacted by low-level concerns.

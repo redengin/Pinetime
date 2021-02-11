@@ -46,17 +46,3 @@ The design of the *local* software should decouple state from the physical
 behavior. For instance, *local* software can process an event to be ready to
 paint an update, but the behavior of painting should be tied to a *paint*
 event that will be published only while the display is active.
-
-API
-================================================================================
-```plantuml
-class Pinetime
-class Face
-Pinetime o- Face
-Face o-- WatchIt
-class WatchIt {
-    events
-    paint()
-}
-
-```
