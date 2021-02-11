@@ -52,6 +52,9 @@ add_subdirectory("lvgl")
 
 add_executable("pinetime"
     "src/main.cpp"
+    "src/System.cpp"
+    "src/Activity.cpp"
+    "src/DefaultActivity.cpp"
 )
 target_link_libraries("pinetime"
     PRIVATE
