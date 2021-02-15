@@ -4,6 +4,7 @@
 #include <memory>
 #include <FreeRTOS.h>
 #include <task.h>
+#include "GattServer.hpp"
 
 namespace Pinetime {
 
@@ -12,8 +13,9 @@ class Activity;
 
 class System {
 public:
-    explicit System();
-    virtual ~System();
+    explicit System(GattServer& gattServer)
+        : mGattServer(gattServer){};
+    virtual ~System() { /* FIXME */ };
 
     /**
      * will call Activity::onAdd() to allow the application
@@ -22,8 +24,9 @@ public:
     bool add(std::unique_ptr<Activity>&); 
     bool remove(std::unique_ptr<Activity>&); 
 
-    void retry(const TaskHandle_t&);
+    void retry(const TaskHandle_t&) { /* FIXME */ };
 protected:
+    GattServer &mGattServer;
 
 private:
     std::vector<Activity> mActivities;
@@ -49,40 +52,6 @@ public:
      */
     virtual bool onAdd() { return true; }
 }; // end class Activity
-
-
-// FIXME move to separate file
-// forward declaration
-class FaceActivity;
-class DefaultActivity : public Activity {
-public:
-    explicit DefaultActivity();
-    virtual ~DefaultActivity();
-
-    bool add(std::unique_ptr<FaceActivity>&); 
-    bool remove(std::unique_ptr<FaceActivity>&); 
-private:
-}; // end class Default Activity
-
-
-// FIXME move to separate file
-class DfuActivity : public Activity {
-public:
-    explicit DfuActivity();
-    virtual ~DfuActivity();
-
-private:
-}; // end class DfuActivity
-
-// FIXME move to separate file
-class FaceActivity : public Activity {
-public:
-    explicit FaceActivity();
-    virtual ~FaceActivity();
-
-private:
-}; // end class FaceActivity
-
 
 
 } // end namespace Pinetime

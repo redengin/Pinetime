@@ -49,12 +49,11 @@ add_subdirectory("nrfsdk")
 add_subdirectory("freertos")
 # Fetch and Configure LVGL
 add_subdirectory("lvgl")
+# FIXME Fetch and Configure NIMBLE
+# add_subdirectory("nimble")
 
 add_executable("pinetime"
     "src/main.cpp"
-    "src/System.cpp"
-    "src/Activity.cpp"
-    "src/DefaultActivity.cpp"
 )
 target_include_directories("pinetime"
     PRIVATE

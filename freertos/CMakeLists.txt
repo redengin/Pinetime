@@ -9,7 +9,7 @@ FetchContent_Declare("project_freertos"
     BUILD_COMMAND OFF
 )
 
-# FreeRTOS Pull / Configuration
+# Pull / Configuration
 # -------------------------------------------------------------------------------
 FetchContent_Populate("project_freertos")
 add_library("freertos-kernel"
@@ -39,5 +39,5 @@ target_include_directories("freertos"
 target_link_libraries("freertos"
     PUBLIC
         "freertos-kernel"
-    PRIVATE
+    # PRIVATE
         "nrfsdk")

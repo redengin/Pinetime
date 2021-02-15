@@ -8,7 +8,7 @@ FetchContent_Declare("project_lvgl"
     BUILD_COMMAND OFF
 )
 
-# FreeRTOS Pull / Configuration
+# Pull / Configuration
 # -------------------------------------------------------------------------------
 FetchContent_Populate("project_lvgl")
 file(GLOB_RECURSE "LVGL_SOURCES" "${project_lvgl_SOURCE_DIR}/src/*.c")

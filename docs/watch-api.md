@@ -35,14 +35,38 @@ Local (On-watch)
 --------------------------------------------------------------------------------
 To minimize power consumption of the watch, the watch hardware is put into the
 lowest power mode possible. The system decides the power mode based upon the
-needs of the active local software. The local software registers needs via
-subscription to the event bus.
+needs of the active local software.
 
-For instance, applications that require *continuous display* will use much more
-power than applications that are simply ready to render a display upon a
-*look gesture* (the user raises the watch into the field of view).
+```plantuml
+class System {
+    BleGatt
+    EventBus
+    Display
+}
 
-The design of the *local* software should decouple state from the physical
-behavior. For instance, *local* software can process an event to be ready to
-paint an update, but the behavior of painting should be tied to a *paint*
-event that will be published only while the display is active.
+class Activity {
+    State
+    LVGL
+}
+
+System *- Activity
+```
+### LVGL (simply create GUI applications)
+The [LVGL](https://docs.lvgl.io/latest/en/html/index.html) framework
+simplifies development of GUI activities. The `Activity` class provides a
+unique `LVGL` instance.
+
+### Event Bus
+LVGL provides it's own event bus. When *displayed*, the LVGL event bus
+will receive it's subscribed events.
+
+If your application needs events while not displayed, you should use
+the `PineTime Event Bus`. The `PineTime Event Bus` will propagate
+system level events (GATT attribute change, local sensor change).
+
+In general, `events` should synchronize a local state structure.
+This `state structure` is used to determine what to display once
+the `Activity` becomes active, and as well can used to restore
+the state of an `Activity` across power upset.
+
+
