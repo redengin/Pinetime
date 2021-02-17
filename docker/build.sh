@@ -3,4 +3,4 @@
 docker run --rm -t \
     --user "$(id -u):$(id -g)" \
     --volume $(pwd):$(pwd) -w $(pwd) \
-    infinitime-build
+    pinetime-build
