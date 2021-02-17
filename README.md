@@ -10,33 +10,38 @@ TBD <!-- host an LVGL web simulation of this repository -->
 
 Usage
 ================================================================================
-Building
+<details>
+Docker is used to decouple the host environment from the development
+environment. If you wish to not use Docker, you can follow the Dockerfile to
+install packages to your local system.
+</details>
+
+To create a loadable binary
 --------------------------------------------------------------------------------
-To **build** the project, everything is simplified via docker.
-
-To create the docker image:
-```sh
-# From the checked-out directory
-docker build -t pinetime-build docker/pinetime-build
-```
-Once you have the docker image, you don't need to re-run the above.
-
-To build use:
+Once you have [Docker pinetime-build](docker/README.md#build)
 ```sh
 ./docker/build.sh
 ```
-Development
+
+To demo an application
 --------------------------------------------------------------------------------
+Once you have [Docker lvgl-emscripten](docker/README.md#demo)
+* Build it
+    ```sh
+    ./docker/demo_build.sh
+    ```
+* Launch the webserver
+    ```sh
+    ./docker/demo_server.sh
+    ```
+* Connect to the webserver
+    * http://localhost
+
+Development
+================================================================================
 You have great ideas for how you'd like to use a watch.
 
 To realize those ideas:
-* you can create an ISSUE
-* you can develop a [solution](docs/development.md)
-
-Playing
---------------------------------------------------------------------------------
-You can see what apps in a simulation.
-* [LVGL local](https://docs.lvgl.io/latest/en/html/get-started/pc-simulator.html)
-* [LVGL in a Webpage](https://github.com/lvgl/lv_sim_emscripten)
-
+* create an ISSUE
+* develop a [solution](docs/development.md)
 
