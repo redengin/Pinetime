@@ -2,8 +2,8 @@ FROM debian:stable-slim
 
 # install the minimal necessary distro packages
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -qq \
- && apt-get install -y \
+RUN apt update -qq \
+ && apt install -y \
       # needed to decompress the toolchain
       bzip2 \
       # needed to support CMake

@@ -16,8 +16,7 @@ add_library("lvgl"
     ${LVGL_SOURCES}
 )
 target_include_directories("lvgl"
-    PRIVATE
-        "."
     PUBLIC
+        "."
         "${project_lvgl_SOURCE_DIR}/src/"
 )

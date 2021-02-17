@@ -52,6 +52,9 @@ add_subdirectory("lvgl")
 # FIXME Fetch and Configure NIMBLE
 # add_subdirectory("nimble")
 
+# Apps
+add_subdirectory("src/apps/lv_benchmark")
+
 add_executable("pinetime"
     "src/main.cpp"
 )
