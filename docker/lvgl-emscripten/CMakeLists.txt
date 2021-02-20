@@ -49,7 +49,7 @@ add_executable("demo_${CHOSEN_DEMO}"
 )
 target_compile_definitions("demo_${CHOSEN_DEMO}"
     PUBLIC
-        "-DCHOSEN_DEMO=${CHOSEN_DEMO}"
+        "-DCHOSEN_DEMO=lv_${CHOSEN_DEMO}"
 )
 target_include_directories("demo_${CHOSEN_DEMO}"
     PRIVATE
