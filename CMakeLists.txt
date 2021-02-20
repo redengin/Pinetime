@@ -53,7 +53,7 @@ add_subdirectory("lvgl")
 # add_subdirectory("nimble")
 
 # Apps
-add_subdirectory("src/apps/lv_benchmark")
+add_subdirectory("src/activities/demo_benchmark")
 
 add_executable("pinetime"
     "src/main.cpp"
