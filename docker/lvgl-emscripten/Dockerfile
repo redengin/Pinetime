@@ -34,4 +34,9 @@ RUN \
     cd /opt/ \
  && git clone --recursive --depth 1 --shallow-submodules https://github.com/littlevgl/emscripten.git
 
-
+# fake a build to pull in libSDL2.a
+RUN \
+    cd /tmp \
+ && touch dummy.c \
+ && emcc -s USE_SDL=2 dummy.c \
+ && rm dummy.c

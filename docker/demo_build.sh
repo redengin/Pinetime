@@ -13,7 +13,7 @@ EXPECTED_HOOK="$(basename $LVGL_APP_PATH)"
 CHOSEN_DEMO="${CHOSEN_DEMO:=${EXPECTED_HOOK}}"
 echo CHOSEN_DEMO = $CHOSEN_DEMO
 
-docker run --rm -it \
+docker run --rm -t \
     --user "$(id -u):$(id -g)" \
     --volume $(pwd):$(pwd) -w $(pwd) \
     lvgl-emscripten \
@@ -21,11 +21,10 @@ docker run --rm -it \
         -DCMAKE_TOOLCHAIN_FILE="/opt/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake" \
         -DLVGL_APP="$LVGL_APP_PATH" \
         -DCHOSEN_DEMO="$CHOSEN_DEMO" \
-        -S docker/lvgl-emscripten/ \
-        -B build/emscripten
-        # -S /opt/emscripten/ \
+        -S "docker/lvgl-emscripten/" \
+        -B "build/emscripten"
 
-docker run --rm -it \
+docker run --rm -t \
     --user "$(id -u):$(id -g)" \
     --volume $(pwd):$(pwd) -w $(pwd) \
     lvgl-emscripten \
