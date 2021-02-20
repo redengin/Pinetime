@@ -24,8 +24,7 @@ target_include_directories("lvgl-drivers"
 
 # TODO use the project version of LVGL
 # add_subdirectory("../../lvgl" "lvgl")
-
-# use the emscripten LVGL core
+# FIXME the lvgl main conflicts with the emscripten LVGL core
 file(GLOB_RECURSE "LVGL_CORE_SOURCE" "/opt/emscripten/lvgl/*.c")
 add_library("lvgl"
     "${LVGL_CORE_SOURCE}"
@@ -58,10 +57,12 @@ target_include_directories("demo_${CHOSEN_DEMO}"
 )
 target_link_libraries("demo_${CHOSEN_DEMO}"
     PUBLIC
+        "lvgl-drivers"
         "lvgl"
         "${CHOSEN_DEMO}"
 )
 # add the entry point
+# TODO create a local lvgl_shell.html that reflects the Pinetime display size
 set_target_properties("demo_${CHOSEN_DEMO}"
     PROPERTIES
         LINK_FLAGS "--shell-file /opt/emscripten/lvgl_shell.html")
