@@ -24,7 +24,14 @@ public:
     bool add(std::unique_ptr<Activity>&); 
     bool remove(std::unique_ptr<Activity>&); 
 
+    /* when the scheduler has nothing left to do, go into the
+     * lowest power mode that will support registred system needs
+     */
+    void idle(void);
+
+    /** should a task blow it's stack, attempt to restart it */
     void retry(const TaskHandle_t&) { /* FIXME */ };
+
 protected:
     GattServer &mGattServer;
 

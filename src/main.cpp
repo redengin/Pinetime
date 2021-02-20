@@ -20,12 +20,10 @@ int main(void) {
     return -1;
 }
 
-
 extern "C"
 void vApplicationIdleHook(void) {
-    // FIXME go into LPO/event driven mode to conserve power
-    // TODO what is this?
-    // lv_tick_inc(1);
+    // go into LPO/event driven mode to conserve power
+    mSystem.idle();
 }
 
 extern "C"
