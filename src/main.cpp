@@ -4,9 +4,7 @@
 
 #include "System.hpp"
 
-// create the System resource repository and event bus
-static Pinetime::GattServer gattServer;
-static Pinetime::System mSystem(gattServer);
+static Pinetime::System mSystem;
 
 int main(void) {
 
