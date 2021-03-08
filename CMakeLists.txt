@@ -24,9 +24,6 @@ string(CONCAT CMAKE_EXE_LINKER_FLAGS
     " -L ${NRF5_SDK_PATH}/modules/nrfx/mdk"
     " -L${CMAKE_SOURCE_DIR} -Tgcc_nrf52.ld"
     " -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm")
-# note: we must override the default cmake linker flags so that CMAKE_C_FLAGS are not added implicitly
-# set(CMAKE_C_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
-# set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_C_COMPILER} <LINK_FLAGS> <OBJECTS> -lstdc++ -o <TARGET> <LINK_LIBRARIES>")
 
 project(pinetime
     VERSION 0.1.0
@@ -48,22 +45,23 @@ add_subdirectory("nrfsdk")
 # Fetch and Configure FreeRTOS
 add_subdirectory("freertos")
 # Fetch and Configure LVGL
-add_subdirectory("lvgl")
-# FIXME Fetch and Configure NIMBLE
-# add_subdirectory("nimble")
+# add_subdirectory("lvgl")
+# Fetch and Configure mynewt-nimble
+add_subdirectory("mynewt-nimble")
 
 # Apps
-add_subdirectory("src/activities/demo_benchmark")
+# add_subdirectory("src/activities/demo_benchmark")
 
-add_executable("pinetime"
-    "src/main.cpp"
-)
-target_include_directories("pinetime"
-    PRIVATE
-        "src/"
-)
-target_link_libraries("pinetime"
-    PRIVATE
-        "nrfsdk"
-        "freertos"
-        "lvgl")
+# add_executable("pinetime"
+#     "src/main.cpp"
+# )
+# target_include_directories("pinetime"
+#     PRIVATE
+#         "include/"
+#         "src/"
+# )
+# target_link_libraries("pinetime"
+#     PRIVATE
+#         # "nrfsdk"
+#         # "freertos"
+#         "lvgl")
